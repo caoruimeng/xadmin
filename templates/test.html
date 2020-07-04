@@ -1,0 +1,382 @@
+
+{% extends 'xadmin/base_site.html' %}
+{% load i18n xadmin_tags %}
+{##}
+{#{% block content %}#}
+{##}
+{#    <div class="content-toolbar btn-toolbar pull-right clearfix">#}
+{#    {% view_block 'top_toolbar' %}#}
+{#    {% block toolbar_column %}#}
+{#    <div class="btn-group">#}
+{#      <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">#}
+{#        <i class="fa fa-list-alt"></i> {% trans "Columns" %} <span class="caret"></span>#}
+{#      </a>#}
+{#      <ul class="dropdown-menu model_fields pull-right" role="menu" aria-labelledby="dLabel">#}
+{#        <li><a href="{{clean_select_field_url}}"><i class="fa fa-refresh"></i> {% trans "Restore Selected" %}</a></li>#}
+{#        <li class="divider"></li>#}
+{#        {% for f, selected, flink in model_fields %}#}
+{#        <li><a href="{{flink}}">#}
+{#          {% if selected %}<i class="fa fa-check"></i>{% else %}<i class="fa fa-blank"></i>{% endif %}#}
+{#          {{f.verbose_name}}</a></li>#}
+{#        {% endfor %}#}
+{#      </ul>#}
+{#    </div>#}
+{#    {% endblock toolbar_column %}#}
+{#    {% block toolbar_layouts %}#}
+{#    <div class="btn-group layout-btns" data-toggle="buttons">#}
+{#      <label class="btn btn-default btn-sm layout-normal active">#}
+{#        <input type="radio"> <i class="fa fa-th-large"></i>#}
+{#      </label>#}
+{#      <label class="btn btn-default btn-sm layout-condensed">#}
+{#        <input type="radio"> <i class="fa fa-th"></i>#}
+{#      </label>#}
+{#      {% view_block 'top_layout_btns' %}#}
+{#    </div>#}
+{#    {% endblock toolbar_layouts %}#}
+{#    {% block toolbar_fullscreen %}#}
+{#    <div class="btn-group layout-btns" data-toggle="buttons-checkbox">#}
+{#      <button type="button" class="btn btn-default btn-sm layout-full"><i class="fa fa-expand"></i></button>#}
+{#      {% view_block 'top_check_btns' %}#}
+{#    </div>#}
+{#    {% endblock toolbar_fullscreen %}#}
+{#    {% view_block 'top_btns' %}#}
+{#  </div>#}
+{##}
+{#  <ul class="pagination pagination-sm pagination-left pagination-inline">#}
+{#    {% view_block 'pagination' 'small' %}#}
+{#  </ul>#}
+{##}
+{#  <form id="changelist-form" action="" method="post"{% view_block 'result_list_form' %}>{% csrf_token %}#}
+{#  {% view_block 'results_top' %}#}
+{#  <div class="results table-responsive">#}
+{#  {% if results %}#}
+{#  {% block results_grid %}#}
+{#  <table class="table table-bordered table-striped table-hover">#}
+{#    {% block results_grid_head %}#}
+{#    <thead>#}
+{#      <tr>{% for o in result_headers.cells %}#}
+{#        <th {{o.tagattrs}}>#}
+{#          {% if o.btns %}#}
+{#            <div class="pull-right">#}
+{#              {% for b in o.btns %}#}
+{#                {{b|safe}}#}
+{#              {% endfor %}#}
+{#            </div>#}
+{#          {% endif %}#}
+{#          {% if o.menus %}#}
+{#            <div class="dropdown pull-left">#}
+{#              <a class="dropdown-toggle" data-toggle="dropdown" href="#">#}
+{#                {{ o.label }}#}
+{#              </a>#}
+{#              <ul class="dropdown-menu" role="menu">#}
+{#                {% for m in o.menus %}#}
+{#                  {{m|safe}}#}
+{#                {% endfor %}#}
+{#              </ul>#}
+{#            </div>#}
+{#          {% else %}#}
+{#            {{ o.label }}#}
+{#          {% endif %}#}
+{#        </th>{% endfor %}#}
+{#      </tr>#}
+{#      {% view_block 'result_head' %}#}
+{#    </thead>#}
+{#    {% endblock results_grid_head %}#}
+{#    {% block results_grid_body %}#}
+{#    <tbody>#}
+{#    {% for row in results %}#}
+{#      <tr class="grid-item{% if row.css_class %} {{row.css_class}}{%endif%}" {{ row.tagattrs }}>{% for o in row.cells %}#}
+{#        <td {{o.tagattrs}}>#}
+{#          {% if o.btns %}#}
+{#            <div class="btn-group pull-right">#}
+{#              {% for b in o.btns %}#}
+{#                {{b|safe}}#}
+{#              {% endfor %}#}
+{#            </div>#}
+{#          {% endif %}#}
+{#          {% if o.menus %}#}
+{#            <div class="dropdown">#}
+{#              <a class="dropdown-toggle" data-toggle="dropdown" href="#">#}
+{#                {{ o.label }}#}
+{#              </a>#}
+{#              <ul class="dropdown-menu">#}
+{#                {% for m in o.menus %}#}
+{#                  {{m|safe}}#}
+{#                {% endfor %}#}
+{#              </ul>#}
+{#            </div>#}
+{#          {% else %}#}
+{#            {{ o.label }}#}
+{#          {% endif %}#}
+{#        </td>#}
+{#      {% endfor %}</tr>#}
+{#      {% view_block 'result_row' row %}#}
+{#    {% endfor %}#}
+{#    </tbody>#}
+{#    {% endblock results_grid_body %}#}
+{#  </table>#}
+{#  {% endblock results_grid %}#}
+{#  {% else %}#}
+{#    <p class="well">{% trans "Empty list" %}</p>#}
+{#  {% endif %}#}
+{#  </div>#}
+{#  {% view_block 'results_bottom' %}#}
+{#  </form>#}
+{##}
+{#  <ul class="pagination">#}
+{#    {% view_block 'pagination' %}#}
+{#  </ul>#}
+
+
+<!--
+    <div id="allmap" style="width: 100%; height: 700px;"></div>
+    <script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=x2rUUhqKCBEAqOysBofM40M5M4AkPTPd"></script>
+
+    <script type="text/javascript">
+    // 百度地图API功能
+
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(118.3088230000, 32.3002390000), 18);
+    map.enableScrollWheelZoom(true);
+    var navigationControl = new BMap.NavigationControl({
+        // 靠左上角位置
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        // LARGE类型
+        type: BMAP_NAVIGATION_CONTROL_LARGE,
+        // 启用显示定位
+        enableGeolocation: true
+    });
+    map.addControl(navigationControl);
+
+    function get_location() {
+
+        var address_latitude ={{ address_latitude |safe}};
+        var address_longitude ={{ address_longitude|safe }};
+        var address_data ={{ address_data |safe}};
+
+
+        var point = []; //存放标注点经纬信息的数组
+        var marker = []; //存放标注点对象的数组
+        for (var i = 0; i < address_longitude.length; i++) {
+            point[i] = new BMap.Point(address_longitude[i], address_latitude[i]); //循环生成新的地图点
+            marker[i] = new BMap.Marker(point[i]); //按照地图点坐标生成标记
+            map.addOverlay(marker[i]);
+        }
+
+        for (i = 0; i < marker.length; i++) {
+            (function () {
+                var index = i;
+                marker[index].addEventListener('click', function () {
+                    this.openInfoWindow(new BMap.InfoWindow(address_data[index]));
+                });
+            })();
+        }
+    }
+
+    </script>
+
+    -->
+{#{% endblock %}#}
+
+{% block extrastyle %}
+<style type="text/css">
+  .btn-toolbar{margin-top: 0;}
+  #content-block.full-content{margin-left: 0;}
+</style>
+{% endblock %}
+{% block bodyclass %}change-list{% endblock %}
+
+{% block nav_title %}{% if brand_icon %}<i class="{{brand_icon}}"></i> {% endif %}{{brand_name}}{% endblock %}
+
+{% block nav_toggles %}
+{% include "xadmin/includes/toggle_menu.html" %}
+{% if has_add_permission %}
+  <a href="{{add_url}}" class="navbar-toggle pull-right"><i class="fa fa-plus"></i></a>
+{% endif %}
+<button class="navbar-toggle pull-right" data-toggle="collapse" data-target=".content-navbar .navbar-collapse">
+  <i class="fa fa-filter"></i>
+</button>
+{% endblock %}
+
+{% block nav_btns %}
+  {% if has_add_permission %}
+    <a href="{{add_url}}" class="btn btn-primary"><i class="fa fa-plus"></i>
+    {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}</a>
+  {% endif %}
+{% endblock nav_btns %}
+
+{% block content %}
+  <div class="content-toolbar btn-toolbar pull-right clearfix">
+    {% view_block 'top_toolbar' %}
+    {% block toolbar_column %}
+    <div class="btn-group">
+      <a class="dropdown-toggle btn btn-default btn-sm" data-toggle="dropdown" href="#">
+        <i class="fa fa-list-alt"></i> {% trans "Columns" %} <span class="caret"></span>
+      </a>
+      <ul class="dropdown-menu model_fields pull-right" role="menu" aria-labelledby="dLabel">
+        <li><a href="{{clean_select_field_url}}"><i class="fa fa-refresh"></i> {% trans "Restore Selected" %}</a></li>
+        <li class="divider"></li>
+        {% for f, selected, flink in model_fields %}
+        <li><a href="{{flink}}">
+          {% if selected %}<i class="fa fa-check"></i>{% else %}<i class="fa fa-blank"></i>{% endif %}
+          {{f.verbose_name}}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endblock toolbar_column %}
+    {% block toolbar_layouts %}
+    <div class="btn-group layout-btns" data-toggle="buttons">
+      <label class="btn btn-default btn-sm layout-normal active">
+        <input type="radio"> <i class="fa fa-th-large"></i>
+      </label>
+      <label class="btn btn-default btn-sm layout-condensed">
+        <input type="radio"> <i class="fa fa-th"></i>
+      </label>
+      {% view_block 'top_layout_btns' %}
+    </div>
+    {% endblock toolbar_layouts %}
+    {% block toolbar_fullscreen %}
+    <div class="btn-group layout-btns" data-toggle="buttons-checkbox">
+      <button type="button" class="btn btn-default btn-sm layout-full"><i class="fa fa-expand"></i></button>
+      {% view_block 'top_check_btns' %}
+    </div>
+    {% endblock toolbar_fullscreen %}
+    {% view_block 'top_btns' %}
+  </div>
+
+  <ul class="pagination pagination-sm pagination-left pagination-inline">
+    {% view_block 'pagination' 'small' %}
+  </ul>
+
+  <form id="changelist-form" action="" method="post"{% view_block 'result_list_form' %}>{% csrf_token %}
+  {% view_block 'results_top' %}
+  <div class="results table-responsive">
+  {% if results %}
+  {% block results_grid %}
+  <table class="table table-bordered table-striped table-hover">
+    {% block results_grid_head %}
+    <thead>
+      <tr>{% for o in result_headers.cells %}
+        <th {{o.tagattrs}}>
+          {% if o.btns %}
+            <div class="pull-right">
+              {% for b in o.btns %}
+                {{b|safe}}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if o.menus %}
+            <div class="dropdown pull-left">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                {{ o.label }}
+              </a>
+              <ul class="dropdown-menu" role="menu">
+                {% for m in o.menus %}
+                  {{m|safe}}
+                {% endfor %}
+              </ul>
+            </div>
+          {% else %}
+            {{ o.label }}
+          {% endif %}
+        </th>{% endfor %}
+      </tr>
+      {% view_block 'result_head' %}
+    </thead>
+    {% endblock results_grid_head %}
+    {% block results_grid_body %}
+    <tbody>
+    {% for row in results %}
+      <tr class="grid-item{% if row.css_class %} {{row.css_class}}{%endif%}" {{ row.tagattrs }}>{% for o in row.cells %}
+        <td {{o.tagattrs}}>
+          {% if o.btns %}
+            <div class="btn-group pull-right">
+              {% for b in o.btns %}
+                {{b|safe}}
+              {% endfor %}
+            </div>
+          {% endif %}
+          {% if o.menus %}
+            <div class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                {{ o.label }}
+              </a>
+              <ul class="dropdown-menu">
+                {% for m in o.menus %}
+                  {{m|safe}}
+                {% endfor %}
+              </ul>
+            </div>
+          {% else %}
+            {{ o.label }}
+          {% endif %}
+        </td>
+      {% endfor %}</tr>
+      {% view_block 'result_row' row %}
+    {% endfor %}
+    </tbody>
+    {% endblock results_grid_body %}
+  </table>
+  {% endblock results_grid %}
+  {% else %}
+    <p class="well">{% trans "Empty list" %}</p>
+  {% endif %}
+  </div>
+  {% view_block 'results_bottom' %}
+  </form>
+
+  <ul class="pagination">
+    {% view_block 'pagination' %}
+  </ul>
+
+
+    <div id="allmap" style="width: 100%; height: 700px;"></div>
+    <script type="text/javascript"
+        src="http://api.map.baidu.com/api?v=2.0&ak=x2rUUhqKCBEAqOysBofM40M5M4AkPTPd"></script>
+
+    <script type="text/javascript">
+    // 百度地图API功能
+
+    var map = new BMap.Map("allmap");
+    map.centerAndZoom(new BMap.Point(106.33021, 29.59656), 16);
+    map.enableScrollWheelZoom(true);
+    var navigationControl = new BMap.NavigationControl({
+        // 靠左上角位置
+        anchor: BMAP_ANCHOR_TOP_LEFT,
+        // LARGE类型
+        type: BMAP_NAVIGATION_CONTROL_LARGE,
+        // 启用显示定位
+        enableGeolocation: true
+    });
+    map.addControl(navigationControl);
+
+
+    var address_latitude ={{ address_latitude |safe}};
+    var address_longitude ={{ address_longitude|safe }};
+    var address_data ={{ address_data |safe}};
+
+    console.log(address_data)
+    console.log(address_longitude)
+    console.log(address_data)
+    var point = []; //存放标注点经纬信息的数组
+    var marker = []; //存放标注点对象的数组
+    for (var i = 0; i < address_longitude.length; i++) {
+        point[i] = new BMap.Point(address_longitude[i], address_latitude[i]); //循环生成新的地图点
+        marker[i] = new BMap.Marker(point[i]); //按照地图点坐标生成标记
+        map.addOverlay(marker[i]);
+    }
+
+    for (i = 0; i < marker.length; i++) {
+        (function () {
+            var index = i;
+            marker[index].addEventListener('click', function () {
+                this.openInfoWindow(new BMap.InfoWindow(address_data[index]));
+            });
+        })();
+    }
+
+
+    </script>
+
+{% endblock %}
